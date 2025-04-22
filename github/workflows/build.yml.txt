@@ -1,0 +1,27 @@
+name: Compilar Proyecto VB.NET
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Compilar VB.NET en Windows
+    runs-on: windows-latest
+
+    steps:
+    - name: Clonar repositorio
+      uses: actions/checkout@v3
+
+    - name: Instalar dependencias de Visual Studio
+      uses: microsoft/setup-msbuild@v1.3.1
+
+    - name: Compilar solución
+      run: msbuild MarcadorBasketVB.sln /p:Configuration=Release
+
+    - name: Subir ejecutable compilado
+      uses: actions/upload-artifact@v3.1.2
+      with:
+        name: MarcadorBasketVB-EXE
+        path: '**/bin/Release/*.exe'
